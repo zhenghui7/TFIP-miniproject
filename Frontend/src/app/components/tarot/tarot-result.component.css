@@ -1,0 +1,46 @@
+.center-it {
+    display: flex;
+    width: 100vw;
+    /* height: 100vh; */
+    justify-content: left;
+    margin-top: 1vh;
+    /* font-size: 1.3em; */
+    gap: 100px;
+    margin-left: 20%;
+  }
+
+  div.container {
+    text-align: left;
+    padding: 10px 20px;
+    word-wrap: break-word;
+    flex-basis: calc(30% );
+    max-width: calc(30% );
+  }
+
+  h2 {
+  font-family: Serif; 
+  font-size: 24px; 
+  font-weight: bold;
+  color: #333; 
+}
+
+  .center-it img {
+    border: 1px solid #2edc25;
+    border-radius: 10px;
+    padding: 3px;
+    width: 100px;
+    flex-basis: calc(12% );
+    max-width: calc(12% );
+  }
+
+  .past {
+    background-color: gray;
+  }
+  
+  .present {
+    background-color: cyan;
+  }
+  
+  .future {
+    background-color: lightgreen;
+  }

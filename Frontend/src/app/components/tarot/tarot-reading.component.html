@@ -1,0 +1,20 @@
+<!-- to add some formatting to the wordings -->
+<span>(Disclaimer: For entertainment purposes only~ 😉)</span>
+<h1>
+  Please select 3 cards.
+  <span class="past">First card reading on ~(The Past)~</span>,
+  <span class="present">Second card on ~(The Present)~</span>,
+  <span class="future">Third card on ~(The Future)~</span>
+</h1>
+
+<div class="card-container">
+  <div class="card" *ngFor="let c of cards" (click)="selectCard(c)">
+    <img
+      [src]="
+        pastSelected === c || presentSelected === c || futureSelected === c
+          ? '/assets/cards/' + c + '.jpg'
+          : '/assets/00.jpg'
+      "
+    />
+  </div>
+</div>

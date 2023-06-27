@@ -1,0 +1,31 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 9fr 1fr;
+    gap: 30px;
+    /* row-gap: 2vh; */
+  }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 100px));
+    gap: 10px;
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+    .grid {
+        grid-template-columns: repeat(3, 150px);
+        gap: 5px;
+    }
+}
+
+.text-center {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    text-align: center;
+}
+
+.button.selected {
+    background-color: #eb36be;
+  }

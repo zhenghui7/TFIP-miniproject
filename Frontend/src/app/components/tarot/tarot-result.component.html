@@ -1,0 +1,51 @@
+<div *ngIf="errorResponse">
+  <h1 style="margin-left: 5%">Error: {{ errorResponse.Error }}</h1>
+  <button
+    type="button"
+    style="width: 100px; margin-left: 5%"
+    [routerLink]="['/tarot']"
+  >
+    Back
+  </button>
+</div>
+
+<div *ngIf="result$ | async as result">
+  <div *ngIf="isTarotResponseArray(result)">
+    <div class="center-it">
+      <img [src]="'/assets/cards/' + pastSelected + '.jpg'" />
+      <div class="container">
+        <h2>
+          {{ result[0].name }}
+          <span class="past">~(The Past)~</span>
+        </h2>
+        <p [innerHTML]="formatFortuneTelling(result[0].fortuneTelling)"></p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isTarotResponseArray(result)">
+    <div class="center-it">
+      <img [src]="'/assets/cards/' + presentSelected + '.jpg'" />
+      <div class="container">
+        <h2>
+          {{ result[1].name }}
+          <span class="present">~(The Present)~</span>
+        </h2>
+        <p [innerHTML]="formatFortuneTelling(result[1].fortuneTelling)"></p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isTarotResponseArray(result)">
+    <div class="center-it">
+      <img [src]="'/assets/cards/' + futureSelected + '.jpg'" />
+      <div class="container">
+        <h2>
+          {{ result[2].name }}
+          <span class="future">~(The Future)~</span>
+        </h2>
+        <p [innerHTML]="formatFortuneTelling(result[2].fortuneTelling)"></p>
+      </div>
+    </div>
+  </div>
+</div>

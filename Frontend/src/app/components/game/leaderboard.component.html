@@ -1,0 +1,22 @@
+<div *ngIf="leaderboardData.length > 0; else emptyLeaderboard">
+  <table>
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Timing</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of leaderboardData; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.timer | number:'1.2-2'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #emptyLeaderboard>
+  <p>No leaderboard data available.</p>
+</ng-template>

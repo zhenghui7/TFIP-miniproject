@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Congratulations!</h2>
+<mat-dialog-content class="mat-typography">
+    You've completed the game in {{ data.timer }} seconds.
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+
+      <ng-container *ngIf="!showInputField">
+        <button mat-raised-button color="primary" style="background-color: blue;" (click)="toggleInputField()">
+          Share to Leaderboard
+        </button>
+        &nbsp;
+      </ng-container>
+
+        <form [formGroup]="form" (submit)="shareToLeaderboard()" style="display: flex; align-items: baseline;">
+            <ng-container *ngIf="showInputField">
+                <mat-form-field appearance="fill" style="flex: 1;">
+                    <mat-label>Enter display name</mat-label>
+                    <input matInput formControlName="gameNameControl" placeholder="Minimum 3 characters">
+                </mat-form-field> &nbsp;
+                
+                    <button mat-raised-button type="submit" color="primary" 
+                    style="background-color: blue; flex: 0 0 100px; min-width: 100px;"
+                    [disabled]="form.invalid">
+                        Submit
+                    </button>
+                &nbsp;
+            </ng-container>     
+        </form>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" style="flex: 0 0 180px; min-width: 180px;">
+        Shuffle and Restart</button>
+</mat-dialog-actions>
