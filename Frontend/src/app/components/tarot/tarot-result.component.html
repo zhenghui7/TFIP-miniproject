@@ -9,7 +9,7 @@
   </button>
 </div>
 
-<div *ngIf="result$ | async as result">
+<div *ngIf="result$ | async as result" class="result-background">
   <div *ngIf="isTarotResponseArray(result)">
     <div class="center-it">
       <img [src]="'/assets/cards/' + pastSelected + '.jpg'" />

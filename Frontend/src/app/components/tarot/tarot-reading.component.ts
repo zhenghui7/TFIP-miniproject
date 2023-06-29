@@ -1,3 +1,4 @@
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CARDS } from 'src/app/util/constant';
@@ -6,6 +7,24 @@ import { CARDS } from 'src/app/util/constant';
   selector: 'app-tarot-reading',
   templateUrl: './tarot-reading.component.html',
   styleUrls: ['./tarot-reading.component.css'],
+  animations: [
+    trigger('flipAnimation', [
+      state(
+        'default',
+        style({
+          transform: 'none',
+        })
+      ),
+      state(
+        'flipped',
+        style({
+          transform: 'rotateY(180deg)',
+        })
+      ),
+      transition('default => flipped', animate('400ms ease')),
+      transition('flipped => default', animate('200ms ease')),
+    ]),
+  ]
 })
 export class TarotReadingComponent implements OnInit {
   cards = CARDS;
@@ -33,8 +52,22 @@ export class TarotReadingComponent implements OnInit {
       this.presentSelected = card;
     } else if (!this.futureSelected && card !== this.pastSelected && card !== this.presentSelected) {
       this.futureSelected = card;
+      
+      setTimeout(() => {
+        this.router.navigate(['/tarot', this.pastSelected, this.presentSelected, this.futureSelected]);
+      }, 1000);
+    }
+  }
 
-      this.router.navigate(['/tarot', this.pastSelected, this.presentSelected, this.futureSelected])
+  getCardState(card: string): string {
+    if (
+      this.pastSelected === card ||
+      this.presentSelected === card ||
+      this.futureSelected === card
+    ) {
+      return 'flipped';
+    } else {
+      return 'default';
     }
   }
 

@@ -13,6 +13,8 @@ export class GameService {
     leaderboardDataSubject = new Subject <LeaderboardData[]>
     leaderboardData$ = this.leaderboardDataSubject.asObservable()
 
+    selectedtDifficulty: string = "easy"
+
     uploadLeaderboard(name: string, timer: number, difficulty: string): void {
         
         const form = new HttpParams() 
@@ -32,6 +34,8 @@ export class GameService {
     }
 
     loadLeaderboard(selectedtDifficulty: string): Observable<LeaderboardData[]> {
+        this.selectedtDifficulty = selectedtDifficulty
+
         return this.http.get<LeaderboardData[]>(`${this.url}/game/${selectedtDifficulty}`).pipe(
             map((response: any) => {
               if (response && response.hasOwnProperty('Empty')) {

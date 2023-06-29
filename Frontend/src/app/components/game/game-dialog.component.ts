@@ -1,9 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
 import { GameService } from 'src/app/game.service';
-import { LeaderboardData } from 'src/app/util/model';
 
 @Component({
   selector: 'app-game-dialog',

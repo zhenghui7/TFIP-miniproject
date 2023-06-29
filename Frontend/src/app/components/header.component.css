@@ -1,7 +1,19 @@
-.example-spacer {
+  .example-spacer {
     flex: 1 1 auto;
   }
-
+  
   .custom-toolbar {
-    background-color: rgb(255, 189, 131);
+    background-color: #330066;
+    color: #ffffff;
+    margin-bottom: 0%;
   }
+  
+  ::ng-deep .custom-menu {
+    background-color: #dec7f4;
+  }
+  
+  .app-title {
+    font-weight: bold;
+    font-size: 20px;
+  }
+  

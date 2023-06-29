@@ -1,6 +1,4 @@
-<!-- to add some formatting to the wordings -->
-<span>(Disclaimer: For entertainment purposes only~ 😉)</span>
-<h1>
+<h1 class="header">
   Please select 3 cards.
   <span class="past">First card reading on ~(The Past)~</span>,
   <span class="present">Second card on ~(The Present)~</span>,
@@ -8,7 +6,7 @@
 </h1>
 
 <div class="card-container">
-  <div class="card" *ngFor="let c of cards" (click)="selectCard(c)">
+  <div class="card" *ngFor="let c of cards" (click)="selectCard(c)" [@flipAnimation]="getCardState(c)">
     <img
       [src]="
         pastSelected === c || presentSelected === c || futureSelected === c

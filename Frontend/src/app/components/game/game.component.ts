@@ -29,7 +29,7 @@ export class GameComponent implements OnInit {
   gameSvc = inject(GameService)
 
   ngOnInit(): void {
-    this.setupCards(1); //default level: 5 pairs
+    this.setupCards(5); //default level: 5 pairs , to update for easier test
   }
 
   setupCards(pairCount: number): void {
@@ -91,7 +91,7 @@ export class GameComponent implements OnInit {
       if (nextState === 'matched') {
         this.matchedCount++;
 
-        if (this.matchedCount === 1) {    // if (this.matchedCount === this.totalPairs)
+        if (this.matchedCount === this.totalPairs) {    //  to update for easier test: if (this.matchedCount === 1)
           clearInterval(this.timerInterval);
           this.isTimerRunning = false;
           

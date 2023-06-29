@@ -1,9 +1,10 @@
-<div *ngIf="leaderboardData.length > 0; else emptyLeaderboard">
+<div class="leaderboard-container" *ngIf="leaderboardData.length > 0; else emptyLeaderboard">
+  <span style="font-weight: 500;">Leaderboard ({{ gameSvc.selectedtDifficulty }})</span>
   <table>
     <thead>
       <tr>
         <th>Rank</th>
-        <th>Name</th>
+        <th>Nick</th>
         <th>Timing</th>
       </tr>
     </thead>
@@ -15,8 +16,11 @@
       </tr>
     </tbody>
   </table>
+  <p class="text-center">
+    Tips for faster timing: You can also click on the same image twice..
+  </p>
 </div>
 
 <ng-template #emptyLeaderboard>
-  <p>No leaderboard data available.</p>
+  <p class="empty-leaderboard">No leaderboard data available.</p>
 </ng-template>
