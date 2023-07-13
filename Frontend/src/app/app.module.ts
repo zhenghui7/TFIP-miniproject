@@ -19,6 +19,10 @@ import { GameSetupComponent } from './components/game/game-setup.component';
 import { GameDialogComponent } from './components/game/game-dialog.component';
 import { LeaderboardComponent } from './components/game/leaderboard.component';
 import { GameService } from './game.service';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { GameEffects } from './store/game.effects';
+import { gameReducer } from './store/game.reducer';
 
 
 const appRoutes: Routes = [
@@ -45,7 +49,8 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule,
-    MaterialModule, HttpClientModule, RouterModule.forRoot(appRoutes , { useHash: true, bindToComponentInputs: true } )
+    MaterialModule, HttpClientModule, RouterModule.forRoot(appRoutes , { useHash: true, bindToComponentInputs: true } ), 
+    StoreModule.forRoot({ game: gameReducer }), EffectsModule.forRoot([GameEffects]),
   ],
   providers: [TarotService, GameService],
   bootstrap: [AppComponent]

@@ -3,7 +3,7 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.mat-menu-panel.custom-menu {
+/* .mat-menu-panel.custom-menu {
     background-color: #1a1a1a;
     color: #ffffff;
   }
@@ -11,4 +11,4 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .mat-menu-panel.custom-menu button {
     color: #ffffff;
   }
-  
+   */

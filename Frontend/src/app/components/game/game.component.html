@@ -5,35 +5,61 @@
 <div class="grid-container">
   <div>
     <div class="button-container">
-      <button mat-raised-button color="primary" class="button" [class.selected]="selectedDifficulty === 'easy'" 
-          (click)="selectDifficulty('easy')">Easy (5 pairs)</button>
-        
-      <button mat-raised-button color="primary" class="button" [class.selected]="selectedDifficulty === 'medium'" 
-          (click)="selectDifficulty('medium')">Medium (10 pairs)</button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="button"
+        [class.selected]="selectedDifficulty === 'easy'"
+        (click)="selectDifficulty('easy')"
+      >
+        Easy (5 pairs)
+      </button>
 
-      <button mat-raised-button color="primary" class="button" [class.selected]="selectedDifficulty === 'hard'" 
-          (click)="selectDifficulty('hard')">Hard (20 pairs)</button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="button"
+        [class.selected]="selectedDifficulty === 'medium'"
+        (click)="selectDifficulty('medium')"
+      >
+        Medium (10 pairs)
+      </button>
 
-      <button mat-raised-button color="primary" class="button" [class.selected]="selectedDifficulty === 'extreme'" 
-          (click)="selectDifficulty('extreme')">Extreme (78 pairs)</button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="button"
+        [class.selected]="selectedDifficulty === 'hard'"
+        (click)="selectDifficulty('hard')"
+      >
+        Hard (20 pairs)
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="button"
+        [class.selected]="selectedDifficulty === 'extreme'"
+        (click)="selectDifficulty('extreme')"
+      >
+        Extreme (78 pairs)
+      </button>
     </div>
 
     <div class="timer">
       <span [ngStyle]="{ 'font-weight': isTimerRunning ? 'bold' : 'normal' }">
-        Time: {{ timer | number:'1.2-2' }} s
+        Time: {{ timer$ | async | number : "1.2-2" }} s
       </span>
     </div>
 
     <div class="grid">
       <app-game-setup
-        *ngFor="let c of cardsData; let i = index"
+        *ngFor="let c of cardsData$ | async; let i = index"
         [cardsData]="c"
         (cardClicked)="cardClicked(i)"
-      >
-      </app-game-setup>
+      ></app-game-setup>
     </div>
   </div>
 
   <app-leaderboard [leaderboardData]="leaderboardData"></app-leaderboard>
-  
 </div>

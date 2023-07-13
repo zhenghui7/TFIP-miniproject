@@ -1,9 +1,20 @@
-import {Component,Input, OnInit, inject} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CARDS } from 'src/app/util/constant';
 import { CardData, LeaderboardData } from 'src/app/util/model';
 import { GameDialogComponent } from './game-dialog.component';
 import { GameService } from 'src/app/game.service';
+import { Observable, firstValueFrom, take } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { GameState } from 'src/app/store/game.reducer';
+import {
+  setupCards,
+  startTimer,
+  stopTimer,
+  updateMatchOrDefault,
+  updateMatchedCount,
+  updateToFlipped,
+} from 'src/app/store/game.actions';
 
 @Component({
   selector: 'app-game',
@@ -15,8 +26,16 @@ export class GameComponent implements OnInit {
 
   @Input() data!: CardData;
 
-  cardsData: CardData[] = []; //referring to cards
+  cardsData$: Observable<CardData[]>;
+  timer$: Observable<number>;
+  isTimerRunning$: Observable<boolean>;
+  flippedCards$: Observable<CardData[]>;
+  matchedCount$: Observable<number>;
+  totalPairs$: Observable<number>;
+  // leaderboardData$: Observable<LeaderboardData[]>;
+
   flippedCards: CardData[] = [];
+  cardsData: CardData[] = [];
   matchedCount: number = 0;
   totalPairs: number = 5; //default level: 5 pairs
   timer: number = 0;
@@ -25,91 +44,94 @@ export class GameComponent implements OnInit {
   selectedDifficulty: string = 'easy';
   leaderboardData: LeaderboardData[] = [];
 
-  dialog = inject(MatDialog);
-  gameSvc = inject(GameService)
+  // dialog = inject(MatDialog);
+  // gameSvc = inject(GameService)
+
+  constructor(
+    private store: Store<{ game: GameState }>,
+    private dialog: MatDialog,
+    private gameSvc: GameService
+  ) {
+    this.cardsData$ = this.store.pipe(select((state) => state.game.cardsData));
+    this.timer$ = this.store.pipe(select((state) => state.game.timer));
+    this.isTimerRunning$ = this.store.pipe(
+      select((state) => state.game.isTimerRunning)
+    );
+    this.flippedCards$ = this.store.pipe(
+      select((state) => state.game.flippedCards)
+    );
+    this.matchedCount$ = this.store.pipe(
+      select((state) => state.game.matchedCount)
+    );
+    this.totalPairs$ = this.store.pipe(
+      select((state) => state.game.totalPairs)
+    );
+
+    // this.leaderboardData$ = this.store.select((state) => state.game.leaderboardData);
+  }
 
   ngOnInit(): void {
     this.setupCards(5); //default level: 5 pairs , to update for easier test
   }
 
   setupCards(pairCount: number): void {
-    this.timer = 0;
-    this.cardsData = [];
-    const selectedCards = this.shuffleArray(this.cards).slice(0, pairCount); 
-
-    selectedCards.forEach((image) => {
-      const cardData: CardData = {
-        imageId: image,
-        state: 'default',
-      };
-
-      this.cardsData.push({ ...cardData });
-      this.cardsData.push({ ...cardData });
-    });
-
-    this.cardsData = this.shuffleArray(this.cardsData);
-  }
-
-  shuffleArray(anArray: any[]): any[] {
-    return anArray
-      .map((a) => [Math.random(), a])
-      .sort((a, b) => a[0] - b[0])
-      .map((a) => a[1]);
+    this.store.dispatch(setupCards({ pairCount }));
   }
 
   cardClicked(index: number): void {
-    const cardInfo = this.cardsData[index];
-
-    if (!this.isTimerRunning) {
-      this.startTimer();
-    }
-
-    if (cardInfo.state === 'default' && this.flippedCards.length < 2) {
-      cardInfo.state = 'flipped';
-      this.flippedCards.push(cardInfo);
-
-      if (this.flippedCards.length > 1) {
-        this.checkForCardMatch();
+    this.isTimerRunning$.subscribe((isTimerRunning) => {
+      if (!isTimerRunning) {
+        this.store.dispatch(startTimer());
       }
+    });
 
-    } else if (cardInfo.state === 'flipped') {
-      cardInfo.state = 'default';
-      this.flippedCards.pop();
+    this.cardsData$.subscribe((cardDataArray: CardData[]) => {
+      const cardInfo = cardDataArray[index];
 
-    }
-  }
+      this.flippedCards$.subscribe((flippedCards) => {
+        if (cardInfo.state === 'default' && this.flippedCards.length < 2) {
+          this.store.dispatch(updateToFlipped({ index }));
 
-  checkForCardMatch(): void {
-    setTimeout(() => {
-      const cardOne = this.flippedCards[0];
-      const cardTwo = this.flippedCards[1];
-      const nextState = cardOne.imageId === cardTwo.imageId ? 'matched' : 'default';
-      cardOne.state = cardTwo.state = nextState;
+          if (flippedCards.length > 1) {
+            setTimeout(() => {
+              const cardOne = flippedCards[0];
+              const cardTwo = flippedCards[1];
+              const nextState =
+                cardOne.imageId === cardTwo.imageId ? 'matched' : 'default';
+              this.store.dispatch(updateMatchOrDefault({ nextState }));
 
-      this.flippedCards = [];
+              this.matchedCount$.subscribe((matchedCount) => {
+                if (nextState === 'matched') {
+                  this.store.dispatch(updateMatchedCount());
 
-      if (nextState === 'matched') {
-        this.matchedCount++;
+                  this.totalPairs$.subscribe((totalPairs) => {
+                    if (matchedCount === totalPairs) {
+                      this.store.dispatch(stopTimer())
 
-        if (this.matchedCount === this.totalPairs) {    //  to update for easier test: if (this.matchedCount === 1)
-          clearInterval(this.timerInterval);
-          this.isTimerRunning = false;
-          
-          const dialogRef = this.dialog.open(GameDialogComponent, {
-            disableClose: true,
-            data: {
-              timer: this.timer.toFixed(2),
-              difficulty: this.selectedDifficulty
-            }
-          });
+                      const dialogRef = this.dialog.open(GameDialogComponent, {
+                        disableClose: true,
+                        // data: {
+                        //   timer: this.timer$.toFixed(2),
+                        //   difficulty: this.selectedDifficulty,
+                        // }, retrieve from store directly through gamedialogcomponent
+                      });
 
-          dialogRef.afterClosed().subscribe(() => {
-            this.restart();
-          });
+                      dialogRef.afterClosed().subscribe(() => {
+                        this.restart();
+                      });
+                    }
+                  });
+                }
+              });
+            }, 1000);
+          }
+        } else {
+          // dispatch update to default
+          cardInfo.state = 'default';
+          this.flippedCards.pop();
         }
-      }
-
-    }, 1000);
+      });
+    });
   }
 
   restart(): void {
@@ -119,15 +141,6 @@ export class GameComponent implements OnInit {
       clearInterval(this.timerInterval);
       this.timer = 0;
       this.isTimerRunning = false;
-    }
-  }
-
-  startTimer(): void {
-    if (!this.isTimerRunning) {
-      this.isTimerRunning = true;
-      this.timerInterval = setInterval(() => {
-        this.timer += 0.01;
-      }, 10);
     }
   }
 
@@ -141,7 +154,7 @@ export class GameComponent implements OnInit {
       this.timer = 0;
       this.isTimerRunning = false;
     }
-  
+
     if (this.isTimerRunning) {
       clearInterval(this.timerInterval);
       this.timer = 0;
@@ -170,9 +183,10 @@ export class GameComponent implements OnInit {
     this.totalPairs = pairCount;
     this.setupCards(pairCount);
 
-    this.gameSvc.loadLeaderboard(difficulty).subscribe((data: LeaderboardData[]) => {
-      this.leaderboardData = data;
-    });
+    this.gameSvc
+      .loadLeaderboard(difficulty)
+      .subscribe((data: LeaderboardData[]) => {
+        this.leaderboardData = data;
+      });
   }
-  
 }
