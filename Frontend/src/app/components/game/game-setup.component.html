@@ -1,13 +1,18 @@
-<div class="card" (click)="cardClicked.emit()" [@cardFlip]="cardsData.state">
-  <div class="back">
-    <div class="img-container">
-      <img src="/assets/00.jpg" />
+   <ng-container *ngIf="(cardsData$ | async) as cardsData">
+    <div class="card" (click)="cardClicked.emit()" [@cardFlip]="cardsData.state">
+      <div class="back">
+        <div class="img-container">
+          <img src="/assets/00.jpg" />
+        </div>
+      </div>
+      <div class="front">
+        <div class="img-container">
+          <img [src]="'/assets/cards/' + cardsData.imageId + '.jpg'" />
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="front">
-    <div class="img-container">
-      <img [src]="'/assets/cards/' + cardsData.imageId + '.jpg'" />
-    </div>
-  </div>
-</div>
+  </ng-container>
+  
+  
+  
   

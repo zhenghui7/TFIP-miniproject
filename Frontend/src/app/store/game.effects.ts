@@ -23,19 +23,11 @@ export class GameEffects {
     )
   );
 
-  // loadLeaderboard$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(GameActions.loadLeaderboard),
-  //     switchMap((action) =>
-  //       this.gameService.loadLeaderboard(action.difficulty).pipe(
-  //         map((leaderboardData) =>
-  //           GameActions.loadLeaderboardSuccess({ leaderboardData })
-  //         ),
-  //         catchError(() =>
-  //           of(GameActions.loadLeaderboardSuccess({ leaderboardData: [] }))
-  //         )
-  //       )
-  //     )
-  //   )
-  // );
+  selectDifficulty$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameActions.updateSelectedDifficulty),
+      map(() => GameActions.stopTimer())
+    )
+  );
+  
 }

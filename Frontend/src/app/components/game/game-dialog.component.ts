@@ -41,7 +41,6 @@ export class GameDialogComponent implements OnInit {
     console.log('Posting to leaderboard:', this.form.value['gameNameControl'] , this.data.timer, this.data.difficulty);
     this.gameSvc.uploadLeaderboard(this.form.value['gameNameControl'] , this.data.timer, this.data.difficulty)
 
-    // Close the dialog after performing necessary actions
     this.dialogRef.close();
   }
 

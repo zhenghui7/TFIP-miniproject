@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { Observable, take } from 'rxjs';
 import { GameService } from 'src/app/game.service';
+import { GameState } from 'src/app/store/game.reducer';
 import { LeaderboardData } from 'src/app/util/model';
 
 @Component({
@@ -9,18 +11,22 @@ import { LeaderboardData } from 'src/app/util/model';
   styleUrls: ['./leaderboard.component.css'],
 })
 export class LeaderboardComponent implements OnInit {
-  
   @Input() leaderboardData: LeaderboardData[] = [];
   // leaderboardData: LeaderboardData[] = [];
   allBundles$!: Observable<LeaderboardData[]>;
+  selectedDifficulty$: Observable<string>;
 
   gameSvc = inject(GameService);
-  defaultDifficulty: string = 'easy';
+  constructor(private store: Store<{ game: GameState }>) {
+    this.selectedDifficulty$ = this.store.pipe(select((state) => state.game.selectedDifficulty));
+  }
 
   ngOnInit(): void {
-    this.allBundles$ = this.gameSvc.loadLeaderboard(this.defaultDifficulty);
-    this.allBundles$.subscribe((data: LeaderboardData[]) => {
-      this.leaderboardData = data;
+    this.selectedDifficulty$.pipe(take(1)).subscribe((difficulty) => {
+      this.allBundles$ = this.gameSvc.loadLeaderboard(difficulty);
+      this.allBundles$.subscribe((data: LeaderboardData[]) => {
+        this.leaderboardData = data;
+      });
     });
 
     this.gameSvc.leaderboardData$.subscribe((data: LeaderboardData[]) => {

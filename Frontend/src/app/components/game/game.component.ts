@@ -7,13 +7,8 @@ import { GameService } from 'src/app/game.service';
 import { Observable, firstValueFrom, take } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameState } from 'src/app/store/game.reducer';
-import {
-  setupCards,
-  startTimer,
-  stopTimer,
-  updateMatchOrDefault,
-  updateMatchedCount,
-  updateToFlipped,
+import {setupCards, startTimer, stopTimer, updateLeaderboardData,
+  updateMatchOrDefault ,updateMatchedCount ,updateSameCardClicked,updateSelectedDifficulty ,updateToFlipped ,
 } from 'src/app/store/game.actions';
 
 @Component({
@@ -24,7 +19,7 @@ import {
 export class GameComponent implements OnInit {
   cards = CARDS; //referring to cardImages
 
-  @Input() data!: CardData;
+  // @Input() data!: CardData;
 
   cardsData$: Observable<CardData[]>;
   timer$: Observable<number>;
@@ -32,20 +27,8 @@ export class GameComponent implements OnInit {
   flippedCards$: Observable<CardData[]>;
   matchedCount$: Observable<number>;
   totalPairs$: Observable<number>;
-  // leaderboardData$: Observable<LeaderboardData[]>;
-
-  flippedCards: CardData[] = [];
-  cardsData: CardData[] = [];
-  matchedCount: number = 0;
-  totalPairs: number = 5; //default level: 5 pairs
-  timer: number = 0;
-  isTimerRunning: boolean = false;
-  timerInterval: any;
-  selectedDifficulty: string = 'easy';
-  leaderboardData: LeaderboardData[] = [];
-
-  // dialog = inject(MatDialog);
-  // gameSvc = inject(GameService)
+  selectedDifficulty$: Observable<string>; 
+  leaderboardData$: Observable<LeaderboardData[]>;
 
   constructor(
     private store: Store<{ game: GameState }>,
@@ -54,20 +37,12 @@ export class GameComponent implements OnInit {
   ) {
     this.cardsData$ = this.store.pipe(select((state) => state.game.cardsData));
     this.timer$ = this.store.pipe(select((state) => state.game.timer));
-    this.isTimerRunning$ = this.store.pipe(
-      select((state) => state.game.isTimerRunning)
-    );
-    this.flippedCards$ = this.store.pipe(
-      select((state) => state.game.flippedCards)
-    );
-    this.matchedCount$ = this.store.pipe(
-      select((state) => state.game.matchedCount)
-    );
-    this.totalPairs$ = this.store.pipe(
-      select((state) => state.game.totalPairs)
-    );
-
-    // this.leaderboardData$ = this.store.select((state) => state.game.leaderboardData);
+    this.isTimerRunning$ = this.store.pipe(select((state) => state.game.isTimerRunning));
+    this.flippedCards$ = this.store.pipe(select((state) => state.game.flippedCards));
+    this.matchedCount$ = this.store.pipe(select((state) => state.game.matchedCount));
+    this.totalPairs$ = this.store.pipe(select((state) => state.game.totalPairs));
+    this.selectedDifficulty$ = this.store.pipe(select((state) => state.game.selectedDifficulty));
+    this.leaderboardData$ = this.store.pipe(select((state) => state.game.leaderboardData));
   }
 
   ngOnInit(): void {
@@ -79,114 +54,101 @@ export class GameComponent implements OnInit {
   }
 
   cardClicked(index: number): void {
-    this.isTimerRunning$.subscribe((isTimerRunning) => {
+    this.isTimerRunning$.pipe(take(1)).subscribe((isTimerRunning) => {
       if (!isTimerRunning) {
         this.store.dispatch(startTimer());
       }
     });
-
-    this.cardsData$.subscribe((cardDataArray: CardData[]) => {
+  
+    this.cardsData$.pipe(take(1)).subscribe((cardDataArray: CardData[]) => {
       const cardInfo = cardDataArray[index];
-
-      this.flippedCards$.subscribe((flippedCards) => {
-        if (cardInfo.state === 'default' && this.flippedCards.length < 2) {
+  
+      this.flippedCards$.pipe(take(1)).subscribe((flippedCards) => {
+        if (cardInfo.state === 'default' && flippedCards.length < 2) {
           this.store.dispatch(updateToFlipped({ index }));
-
-          if (flippedCards.length > 1) {
+  
+          if (flippedCards.length === 1) {
             setTimeout(() => {
-              const cardOne = flippedCards[0];
-              const cardTwo = flippedCards[1];
-              const nextState =
-                cardOne.imageId === cardTwo.imageId ? 'matched' : 'default';
-              this.store.dispatch(updateMatchOrDefault({ nextState }));
+              this.cardsData$.pipe(take(1)).subscribe((updatedCardDataArray: CardData[]) => {
+                const updatedCardOne = updatedCardDataArray.find((card) => card.state === 'flipped');
+                const updatedCardTwo = updatedCardDataArray.find((card) => card.state === 'flipped' && card !== updatedCardOne);
 
-              this.matchedCount$.subscribe((matchedCount) => {
-                if (nextState === 'matched') {
-                  this.store.dispatch(updateMatchedCount());
+                if (updatedCardOne && updatedCardTwo) {
+                  const nextState = updatedCardOne.imageId === updatedCardTwo.imageId ? 'matched' : 'default';
+                  this.store.dispatch(updateMatchOrDefault({ nextState }));
 
-                  this.totalPairs$.subscribe((totalPairs) => {
-                    if (matchedCount === totalPairs) {
-                      this.store.dispatch(stopTimer())
+                  this.matchedCount$.pipe(take(1)).subscribe((matchedCount) => {
+                    if (nextState === 'matched') {
+                      this.store.dispatch(updateMatchedCount());
+  
+                      this.totalPairs$.pipe(take(1)).subscribe((totalPairs) => {
 
-                      const dialogRef = this.dialog.open(GameDialogComponent, {
-                        disableClose: true,
-                        // data: {
-                        //   timer: this.timer$.toFixed(2),
-                        //   difficulty: this.selectedDifficulty,
-                        // }, retrieve from store directly through gamedialogcomponent
-                      });
-
-                      dialogRef.afterClosed().subscribe(() => {
-                        this.restart();
+                        if (matchedCount === totalPairs) {
+                          this.store.dispatch(stopTimer());
+  
+                          this.timer$.pipe(take(1)).subscribe((timer) => {
+                            this.selectedDifficulty$.pipe(take(1)).subscribe((selectedDifficulty) => {
+                              const dialogRef = this.dialog.open(GameDialogComponent, {
+                                disableClose: true,
+                                data: {
+                                  timer: timer.toFixed(2),
+                                  difficulty: selectedDifficulty,
+                                },
+                              });
+  
+                              dialogRef.afterClosed().subscribe(() => {
+                                this.selectDifficulty(selectedDifficulty);
+                              });
+                            });
+                          });
+                        }
                       });
                     }
                   });
+                } else {
+                  this.store.dispatch(updateSameCardClicked({ nextState: 'default' }));
                 }
               });
             }, 1000);
           }
-        } else {
-          // dispatch update to default
-          cardInfo.state = 'default';
-          this.flippedCards.pop();
-        }
+        } 
       });
     });
   }
 
-  restart(): void {
-    this.matchedCount = 0;
-    this.setupCards(this.totalPairs);
-    if (this.isTimerRunning) {
-      clearInterval(this.timerInterval);
-      this.timer = 0;
-      this.isTimerRunning = false;
-    }
-  }
-
   selectDifficulty(difficulty: string): void {
-    this.selectedDifficulty = difficulty;
-    let pairCount = 0;
-    // to add the gameSvc to load the leaderboard for default and clicked on the difficulty button
+    this.store.dispatch(updateSelectedDifficulty({ difficulty }));
 
-    if (this.isTimerRunning) {
-      clearInterval(this.timerInterval);
-      this.timer = 0;
-      this.isTimerRunning = false;
-    }
+    this.selectedDifficulty$.pipe(take(1)).subscribe((difficulty) => {
+      let pairCount = 0;
 
-    if (this.isTimerRunning) {
-      clearInterval(this.timerInterval);
-      this.timer = 0;
-      this.isTimerRunning = false;
-    }
+      switch (difficulty) {
+        case 'easy':
+          pairCount = 5;
+          break;
+        case 'medium':
+          pairCount = 10;
+          break;
+        case 'hard':
+          pairCount = 20;
+          break;
+        case 'extreme':
+          pairCount = this.cards.length;
+          break;
+        default:
+          pairCount = 5;
+          break;
+      }
 
-    // Set the number of pairs based on the difficulty level
-    switch (difficulty) {
-      case 'easy':
-        pairCount = 5;
-        break;
-      case 'medium':
-        pairCount = 10;
-        break;
-      case 'hard':
-        pairCount = 20;
-        break;
-      case 'extreme':
-        pairCount = this.cards.length;
-        break;
-      default:
-        pairCount = 5;
-        break;
-    }
+      this.store.dispatch(setupCards({ pairCount }));
 
-    this.totalPairs = pairCount;
-    this.setupCards(pairCount);
+      this.gameSvc
+        .loadLeaderboard(difficulty)
+        .subscribe((data: LeaderboardData[]) => {
+          this.store.dispatch(updateLeaderboardData({ data }));
 
-    this.gameSvc
-      .loadLeaderboard(difficulty)
-      .subscribe((data: LeaderboardData[]) => {
-        this.leaderboardData = data;
-      });
+          // this.leaderboardData = data;
+        });
+    });
   }
 }

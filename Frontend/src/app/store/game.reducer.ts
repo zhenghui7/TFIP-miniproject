@@ -25,7 +25,7 @@ export interface GameState {
 export const initialState: GameState = {
   cardsData: [],
   flippedCards: [],
-  matchedCount: 0,
+  matchedCount: 1,
   totalPairs: 5,
   timer: 0,
   isTimerRunning: false,
@@ -41,7 +41,7 @@ export const gameReducer = createReducer(
     ...state,
     timer: 0,
     flippedCards: [],
-    matchedCount: 0,
+    matchedCount: 1,
     totalPairs: pairCount,
     cardsData: generateCardData(pairCount),
     clickedIndex: [],
@@ -73,9 +73,23 @@ export const gameReducer = createReducer(
     state.flippedCards = []
   }),
 
+  immerOn(GameActions.updateSameCardClicked, (state, { nextState }) => {
+    state.cardsData[state.clickedIndex[0]].state = nextState;
+    state.clickedIndex = [];
+    state.flippedCards = []
+  }),
+
   on(GameActions.updateMatchedCount, (state) => ({
     ...state,
     matchedCount: state.matchedCount + 1,
+  })),
+  on(GameActions.updateSelectedDifficulty, (state, { difficulty }) => ({
+    ...state,
+    selectedDifficulty: difficulty
+  })),
+  on(GameActions.updateLeaderboardData, (state, { data }) => ({
+    ...state,
+    leaderboardData: data
   })),
 
   // Add other reducer actions here

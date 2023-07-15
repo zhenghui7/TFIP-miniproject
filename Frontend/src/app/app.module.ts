@@ -50,7 +50,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule,
     MaterialModule, HttpClientModule, RouterModule.forRoot(appRoutes , { useHash: true, bindToComponentInputs: true } ), 
-    StoreModule.forRoot({ game: gameReducer }), EffectsModule.forRoot([GameEffects]),
+    StoreModule.forRoot({ game: gameReducer }), EffectsModule.forRoot([GameEffects]), 
   ],
   providers: [TarotService, GameService],
   bootstrap: [AppComponent]
