@@ -7,6 +7,12 @@ export interface ErrorResponse {
   Error: string;
 }
 
+export interface HoroscopeResult {
+  today: string;
+  tomorrow: string;
+  monthly: string;
+}
+
 export interface CardData {
   imageId: string;
   state: 'default' | 'flipped' | 'matched';

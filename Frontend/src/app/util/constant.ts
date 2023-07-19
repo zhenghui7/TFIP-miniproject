@@ -10,3 +10,8 @@ export const CARDS: string[] = [
   ];
   
 export const URLSTRING: string = 'http://localhost:8080'
+export const WBSTRING: string = 'localhost:8080'
+
+
+export const ZODIAC: string[] = ["aries", "taurus", "gemini", "cancer", "leo",
+ "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"];

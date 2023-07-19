@@ -105,9 +105,7 @@ export class GameComponent implements OnInit {
                       });
                     }
                   });
-                } else {
-                  this.store.dispatch(updateSameCardClicked({ nextState: 'default' }));
-                }
+                } 
               });
             }, 1000);
           }

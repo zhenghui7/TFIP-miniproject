@@ -6,6 +6,7 @@
     background-color: #330066;
     color: #ffffff;
     margin-bottom: 0%;
+    height: 50px;
   }
   
   ::ng-deep .custom-menu {

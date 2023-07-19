@@ -1,0 +1,9 @@
+<div class="container">
+  <h1>Select your Zodiac Sign</h1>
+  <div class="horoscope">
+    <div class="image-wrapper" *ngFor="let sign of zodiacSigns">
+      <img [src]="'assets/horoscope/' + sign + '.jpg'" />
+      <div class="overlay" (click)="onImageClick(sign)"></div>
+    </div>
+  </div>
+</div>

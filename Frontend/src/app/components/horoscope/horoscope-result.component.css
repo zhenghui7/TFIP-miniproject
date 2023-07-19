@@ -1,0 +1,40 @@
+.result-background {
+    background-color: #f0f0f0;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .result-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .result-text {
+    font-size: 16px;
+    margin-bottom: 15px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  
+  .horoscope-section {
+    margin-bottom: 30px;
+  }
+
+  .image-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #330066;
+    padding: 5px;
+  }
+
+  img {
+    max-width: 20%;
+    max-height: 20%;
+    border-radius: 5px;
+    justify-content: center;
+    box-shadow: 0 4px 17px gold;
+  }
+
+  

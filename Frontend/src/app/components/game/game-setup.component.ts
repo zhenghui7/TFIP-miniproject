@@ -36,7 +36,7 @@ import { CardData } from "src/app/util/model";
       transition('* => matched', [animate('200ms')]),
     ]),
   ],
-  
+
 })
 export class GameSetupComponent implements OnInit {
 
@@ -57,5 +57,5 @@ export class GameSetupComponent implements OnInit {
       console.log(">>>>>> " + this.cardsData.state)
     });
   }
-  
+
 }

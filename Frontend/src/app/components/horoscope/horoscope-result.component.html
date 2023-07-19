@@ -1,0 +1,40 @@
+<div *ngIf="errorResponse">
+  <h1 style="margin-left: 5%">Error: {{ errorResponse.Error }}</h1>
+  <button
+    type="button"
+    style="width: 100px; margin-left: 5%"
+    [routerLink]="['/horoscope']"
+  >
+    Back
+  </button>
+</div>
+
+<div *ngIf="horoscopeResult" class="image-container">
+  <img [src]="'assets/horoscope/' + sign + '.jpg'" />
+</div>
+
+<div *ngIf="horoscopeResult" class="result-background">
+  <div class="horoscope-section">
+    <h2 class="result-title">Today's Horoscope</h2>
+    <p
+      class="result-text"
+      [innerHTML]="underlineLabels(horoscopeResult.today)"
+    ></p>
+  </div>
+
+  <div class="horoscope-section">
+    <h2 class="result-title">Tomorrow's Horoscope</h2>
+    <p
+      class="result-text"
+      [innerHTML]="underlineLabels(horoscopeResult.tomorrow)"
+    ></p>
+  </div>
+
+  <div>
+    <h2 class="result-title">Monthly Horoscope</h2>
+    <p
+      class="result-text"
+      [innerHTML]="underlineLabels(horoscopeResult.monthly)"
+    ></p>
+  </div>
+</div>

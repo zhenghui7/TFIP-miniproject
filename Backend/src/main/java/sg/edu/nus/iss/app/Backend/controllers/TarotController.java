@@ -33,14 +33,8 @@ public class TarotController {
 
         boolean hasEmptyBundle = false;
 
-        System.out.println(">>>>>> " + pastSelected);
-        System.out.println(">>>>>> " + presentSelected);
-        System.out.println(">>>>>> " + futureSelected);
-
         List<TarotResult> tarotResultList = tarotSvc.retrieveTarotResult(pastSelected + ".jpg",
                 presentSelected + ".jpg", futureSelected + ".jpg");
-
-        System.out.println(">>>>>>>>>>" + tarotResultList);
 
         for (TarotResult rs : tarotResultList) {
             if (rs == null) {

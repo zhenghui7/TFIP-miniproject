@@ -1,4 +1,9 @@
-  .grid-container {
+ .toolbar-container {
+  justify-content: center;
+  height: 40px;
+ }
+
+ .grid-container {
     display: grid;
     grid-template-columns: 9fr 1fr;
     gap: 30px;
