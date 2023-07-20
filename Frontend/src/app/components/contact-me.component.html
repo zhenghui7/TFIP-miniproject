@@ -1,20 +1,19 @@
 <table>
-    <tr>
-      <td colspan="2">
-        <input type="text" [(ngModel)]="username" placeholder="Username" />
-        <button type="button" (click)="connect()">Connect</button>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <textarea readonly rows="10" cols="80" id="log">{{ log.join('\n') }}</textarea>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <input type="text" size="51" [(ngModel)]="message" placeholder="Message" />
-        <button type="button" (click)="send()">Send</button>
-      </td>
-    </tr>
-  </table>
-  
+  <tr>
+    <td colspan="2">
+      <input type="text" [(ngModel)]="username" placeholder="Username" />
+      <button type="button" (click)="connect()">Connect</button>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <textarea readonly rows="10" cols="80" id="log">{{ log.join('\n') }}</textarea>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="text" size="51" [(ngModel)]="message" placeholder="Message" />
+      <button type="button" (click)="send()">Send</button>
+    </td>
+  </tr>
+</table>
