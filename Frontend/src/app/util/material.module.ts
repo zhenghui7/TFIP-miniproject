@@ -6,10 +6,11 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
 
 const matModules: any[] = [
     MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule, MatDialogModule,
-    MatFormFieldModule, MatInputModule
+    MatFormFieldModule, MatInputModule, MatCardModule
   ]
   
   @NgModule({

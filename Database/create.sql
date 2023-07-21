@@ -3,11 +3,11 @@
 
 -- source C:/opt/tfip/miniProject/Database/create.sql
 
-drop database if exists leaderboard;
+drop database if exists miniproject;
 
-create database leaderboard;
+create database miniproject;
 
-use leaderboard;
+use miniproject;
 
 CREATE TABLE easy (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -37,4 +37,21 @@ CREATE TABLE extreme (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
 
-grant all privileges on leaderboard.* to 'fred'@'%';
+  INSERT INTO `miniproject`.`medium` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '1000');
+  
+  INSERT INTO `miniproject`.`hard` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '1000');
+
+  INSERT INTO `miniproject`.`extreme` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '10000');
+
+CREATE TABLE messages (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `content` TEXT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+);
+
+grant all privileges on miniproject.* to 'fred'@'%';
+
+
+
