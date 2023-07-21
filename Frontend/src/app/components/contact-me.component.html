@@ -1,48 +1,37 @@
-<!-- <table>
-  <tr>
-    <td colspan="2">
-      <input type="text" [(ngModel)]="username" placeholder="Username" [disabled]="connected" />
-      <button type="button" (click)="connect()" [disabled]="connected">Connect</button>
-      <button type="button" (click)="disconnect()" [disabled]="!connected">Disconnect</button>
+<div class="grid-container">
+  <div class="container">
+    <div class="form">
+      <mat-form-field appearance="fill">
+        <input matInput [(ngModel)]="username" placeholder="Username" [disabled]="connected" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="connect()" [disabled]="connected">Connect</button>
+      <button mat-raised-button color="warn" (click)="disconnect()" [disabled]="!connected">Disconnect</button>
+      <button mat-raised-button color="primary" (click)="retrievePastMessages()" [disabled]="!connected">Retrieve Past Messages</button>
       <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-    </td>
-  </tr>
-  <tr>
-    <td class="chat-area">
-      <textarea #logArea readonly rows="20" cols="80" id="log">{{ log.join('\n') }}</textarea>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <input type="text" size="51" [(ngModel)]="message" placeholder="Message" />
-      <button type="button" (click)="send()" [disabled]="!message">Send</button>
-    </td>
-  </tr>
-</table> -->
+    </div>
 
-<div class="container">
-  <div class="form">
-    <mat-form-field appearance="fill">
-      <input matInput [(ngModel)]="username" placeholder="Username" [disabled]="connected" />
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="connect()" [disabled]="connected">Connect</button>
-    <button mat-raised-button color="warn" (click)="disconnect()" [disabled]="!connected">Disconnect</button>
-    <button mat-raised-button color="primary" (click)="retrievePastMessages()" [disabled]="!connected">Retrieve Past Messages</button>
-    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div class="chat-area">
+      <mat-card>
+        <mat-card-content>
+          <div class="chat-log">
+            <textarea #logArea readonly rows="10" cols="80" [(ngModel)]="logContent"></textarea>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="input-area">
+      <mat-form-field appearance="fill">
+        <input matInput type="text" [(ngModel)]="message" placeholder="Message" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="send()" [disabled]="!message">Send</button>
+    </div>
   </div>
 
-  <div class="chat-area">
-    <mat-card>
-      <mat-card-content>
-        <textarea #logArea readonly rows="10" cols="80" [value]="log.join('\n')"></textarea>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <div class="input-area">
-    <mat-form-field appearance="fill">
-      <input matInput type="text" [(ngModel)]="message" placeholder="Message" />
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="send()" [disabled]="!message">Send</button>
+  <div class="connected-users" *ngIf="connectedUsersArray.length > 0">
+    <h3>Currently Connected Users:</h3>
+    <ul>
+      <li *ngFor="let user of connectedUsersArray">{{ user }}</li>
+    </ul>
   </div>
 </div>

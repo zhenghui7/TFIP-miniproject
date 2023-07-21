@@ -1,22 +1,35 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { WBSTRING } from '../util/constant';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-contact-me',
   templateUrl: './contact-me.component.html',
   styleUrls: ['./contact-me.component.css'],
 })
-export class ContactMeComponent {
+export class ContactMeComponent implements OnInit {
   private ws!: WebSocket;
   wsURL = WBSTRING;
 
   username!: string;
-  log: string[] = [];
+  // log: string[] = [];
+  log: { from: string, content: string }[] = [];
   message!: string;
   errorMessage: string = '';
   connected: boolean = false;
-
+  // connectedUsers: string[] = [];
+  connectedUsers: Subject<string[]> = new Subject<string[]>();
+  connectedUsersArray: string[] = [];
+  logContent: string = '';
+  
+  
   @ViewChild('logArea') logArea!: ElementRef;
+
+  ngOnInit() {
+    this.connectedUsers.subscribe(users => {
+      this.connectedUsersArray = users;
+    });
+  }
 
   connect() {
     if (!this.username) {
@@ -32,14 +45,17 @@ export class ContactMeComponent {
       console.log('WebSocket connection established');
 
       this.ws.onmessage = this.handleIncomingMessage.bind(this);
+      this.updateConnectedUsers();
     };
 
     this.ws.onmessage = (event) => {
+      this.updateConnectedUsers(); 
       const log = document.getElementById('log') as HTMLTextAreaElement;
       console.log(event.data);
       const message = JSON.parse(event.data);
-      log.innerHTML += message.from + ' : ' + message.content + '\n';
+      this.log.push({ from: message.from, content: message.content }); // Add the new message to the log array
       this.scrollChatToBottom();
+      this.logContent = this.log.map(message => message.from + ' : ' + message.content).join('\n');
     };
 
     this.ws.onerror = (error) => {
@@ -49,6 +65,7 @@ export class ContactMeComponent {
     this.ws.onclose = (event) => {
       console.log('WebSocket connection closed');
       this.connected = false;
+      this.updateConnectedUsers(); 
     };
   }
 
@@ -56,14 +73,18 @@ export class ContactMeComponent {
     if (this.ws) {
       this.ws.close();
     }
-    const disconnectionMessage = 'You have disconnected from the group chat';
-    this.log.push(disconnectionMessage); // Add the disconnection message to the log array
+    const disconnectionMessage = {
+      from: "*****************",
+      content: 'You have disconnected from the group chat'
+    };
+    this.log.push(disconnectionMessage); 
     this.scrollChatToBottom();
+    this.logContent = this.log.map(message => message.from + ' : ' + message.content).join('\n');
   }
 
   retrievePastMessages() {
     this.log = []; // Clear the log array
-    this.logArea.nativeElement.value = ''; 
+    // this.logArea.nativeElement.value = '';
 
     if (!this.connected) {
       return;
@@ -78,7 +99,9 @@ export class ContactMeComponent {
 
   send() {
     if (!this.connected) {
-      this.errorMessage = !this.username ? 'Please enter a username and connect' : 'Please connect first' ;
+      this.errorMessage = !this.username
+        ? 'Please enter a username and connect'
+        : 'Please connect first';
       return;
     }
 
@@ -101,8 +124,24 @@ export class ContactMeComponent {
 
   private handleIncomingMessage(event: MessageEvent) {
     const message = JSON.parse(event.data);
-    this.log.push(message.from + ' : ' + message.content); // Add the new message to the log array
-    this.scrollChatToBottom();
+    if (message.content === 'connected_users_list') {
+      this.connectedUsers.next(message.users);
+      console.log(">>>>>>>>>>>> in connected_users_list: " + message.users)
+    } else {
+      this.log.push({ from: message.from, content: message.content }); // Add the new message to the log array
+      this.scrollChatToBottom();
+      this.logContent = this.log.map(message => message.from + ' : ' + message.content).join('\n');
+    }
   }
 
+  private updateConnectedUsers() {
+    if (this.connected) {
+      // WebSocket is connected, get the list of connected users from the server
+      this.ws.send(JSON.stringify({ content: 'request_connected_users' }));
+    } else {
+      // WebSocket is disconnected, clear the list of connected users
+      this.connectedUsers.next([]);
+    }
+  }
+  
 }

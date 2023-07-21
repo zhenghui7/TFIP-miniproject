@@ -5,7 +5,9 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -25,6 +27,7 @@ public class ChatEndpoint extends TextWebSocketHandler {
     private WebSocketSession session;
     private static final Set<ChatEndpoint> chatEndpoints = new CopyOnWriteArraySet<>();
     private static HashMap<String, String> users = new HashMap<>();
+    private static final Set<String> connectedUsers = new HashSet<>();
 
     @Autowired
     private MessageEncoder messageEncoder;
@@ -45,6 +48,7 @@ public class ChatEndpoint extends TextWebSocketHandler {
 
         // Extract the username from the session attributes
         users.put(session.getId(), username);
+        connectedUsers.add(username);
 
         Message message = new Message();
         message.setFrom(username + " | (" + getTimeNow() + ")");
@@ -57,6 +61,8 @@ public class ChatEndpoint extends TextWebSocketHandler {
         Message message = messageDecoder.convert(textMessage);
         if ("request_past_messages".equals(message.getContent())) {
             sendPastMessages(session);
+        } else if ("request_connected_users".equals(message.getContent())) {
+            sendConnectedUsers(session);
         } else {
             message.setFrom(users.get(session.getId()) + " | (" + getTimeNow() + ")");
             broadcast(message);
@@ -75,8 +81,11 @@ public class ChatEndpoint extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws IOException {
         chatEndpoints.remove(this);
+        String disconnectedUsername = users.get(session.getId());
+        connectedUsers.remove(disconnectedUsername);
+
         Message message = new Message();
-        message.setFrom(users.get(session.getId())  + " | (" + getTimeNow() + ")");
+        message.setFrom(users.get(session.getId()) + " | (" + getTimeNow() + ")");
         message.setContent("Disconnected!");
         broadcast(message);
     }
@@ -107,8 +116,18 @@ public class ChatEndpoint extends TextWebSocketHandler {
             return URLDecoder.decode(encodedUsername, StandardCharsets.UTF_8.toString());
         } catch (Exception e) {
             e.printStackTrace();
-            return ""; 
+            return "";
         }
+    }
+
+    private void sendConnectedUsers(WebSocketSession session) throws IOException {
+        Message message = new Message();
+        message.setContent("connected_users_list");
+        message.setUsers(new ArrayList<>(connectedUsers));
+
+        String json = (String) messageEncoder.convert(message).getPayload();
+        TextMessage textMessage = new TextMessage(json);
+        session.sendMessage(textMessage);
     }
 
     private String getTimeNow() {

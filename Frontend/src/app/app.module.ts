@@ -33,7 +33,7 @@ const appRoutes: Routes = [
   { path: 'tarot/:pastSelected/:presentSelected/:futureSelected', component: TarotResultComponent, title: 'Tarot Result'},
   { path: "horoscope", component: HoroscopeComponent, title: 'Horoscope' },
   { path: "horoscope/:sign", component: HoroscopeResultComponent, title: 'Horoscope Reading' },
-  { path: "contact", component: ContactMeComponent, title: 'Contact' },
+  { path: "board", component: ContactMeComponent, title: 'Message Board' },
   { path: '**', redirectTo: '/', pathMatch: 'full'}
 ]
 

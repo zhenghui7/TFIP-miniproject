@@ -148,6 +148,10 @@
   font-size: 14px;
   margin-top: 5px;
 } */
+.grid-container {
+  display: grid;
+  grid-template-columns: 8fr 2fr;
+}
 
 .container {
   display: flex;
@@ -198,4 +202,8 @@ textarea {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   line-height: 2.5;
+}
+
+.connected-users {
+  margin-top: 20px;
 }
