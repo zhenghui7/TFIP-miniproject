@@ -14,7 +14,7 @@
       <mat-card>
         <mat-card-content>
           <div class="chat-log">
-            <textarea #logArea readonly rows="10" cols="80" [(ngModel)]="logContent"></textarea>
+            <textarea #logArea readonly rows="12" [(ngModel)]="logContent"></textarea>
           </div>
         </mat-card-content>
       </mat-card>
@@ -22,7 +22,7 @@
 
     <div class="input-area">
       <mat-form-field appearance="fill">
-        <input matInput type="text" [(ngModel)]="message" placeholder="Message" />
+        <input matInput type="text" [(ngModel)]="message" placeholder="Message" class="wider-input" />
       </mat-form-field>
       <button mat-raised-button color="primary" (click)="send()" [disabled]="!message">Send</button>
     </div>
@@ -30,8 +30,8 @@
 
   <div class="connected-users" *ngIf="connectedUsersArray.length > 0">
     <h3>Currently Connected Users:</h3>
-    <ul>
+    <ol>
       <li *ngFor="let user of connectedUsersArray">{{ user }}</li>
-    </ul>
+    </ol>
   </div>
 </div>

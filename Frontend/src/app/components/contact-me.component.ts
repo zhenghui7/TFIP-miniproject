@@ -12,23 +12,17 @@ export class ContactMeComponent implements OnInit {
   wsURL = WBSTRING;
 
   username!: string;
-  // log: string[] = [];
   log: { from: string, content: string }[] = [];
   message!: string;
   errorMessage: string = '';
   connected: boolean = false;
-  // connectedUsers: string[] = [];
-  connectedUsers: Subject<string[]> = new Subject<string[]>();
   connectedUsersArray: string[] = [];
   logContent: string = '';
-  
+  isRequestingConnectedUsers: boolean = false;
   
   @ViewChild('logArea') logArea!: ElementRef;
 
   ngOnInit() {
-    this.connectedUsers.subscribe(users => {
-      this.connectedUsersArray = users;
-    });
   }
 
   connect() {
@@ -43,20 +37,13 @@ export class ContactMeComponent implements OnInit {
       this.errorMessage = '';
       this.connected = true;
       console.log('WebSocket connection established');
-
-      this.ws.onmessage = this.handleIncomingMessage.bind(this);
       this.updateConnectedUsers();
     };
 
     this.ws.onmessage = (event) => {
-      this.updateConnectedUsers(); 
-      const log = document.getElementById('log') as HTMLTextAreaElement;
-      console.log(event.data);
-      const message = JSON.parse(event.data);
-      this.log.push({ from: message.from, content: message.content }); // Add the new message to the log array
-      this.scrollChatToBottom();
-      this.logContent = this.log.map(message => message.from + ' : ' + message.content).join('\n');
+      this.handleIncomingMessage(event);
     };
+
 
     this.ws.onerror = (error) => {
       console.error('WebSocket connection error:', error);
@@ -83,8 +70,7 @@ export class ContactMeComponent implements OnInit {
   }
 
   retrievePastMessages() {
-    this.log = []; // Clear the log array
-    // this.logArea.nativeElement.value = '';
+    this.log = []; 
 
     if (!this.connected) {
       return;
@@ -123,12 +109,24 @@ export class ContactMeComponent implements OnInit {
   }
 
   private handleIncomingMessage(event: MessageEvent) {
+    const log = document.getElementById('log') as HTMLTextAreaElement;
+    // console.log(">>>>>>>>>>>>>> event.data: " + event.data);
+
     const message = JSON.parse(event.data);
     if (message.content === 'connected_users_list') {
-      this.connectedUsers.next(message.users);
-      console.log(">>>>>>>>>>>> in connected_users_list: " + message.users)
+      // this.connectedUsers.next(message.users);
+      this.connectedUsersArray = message.users;
+      // console.log(">>>>>>>>>>>> in connected_users_list: " + message.users)
+
+      if (!this.isRequestingConnectedUsers) {
+        this.isRequestingConnectedUsers = true;
+        setTimeout(() => {
+          this.updateConnectedUsers();
+        }, 1000);
+      }
+      
     } else {
-      this.log.push({ from: message.from, content: message.content }); // Add the new message to the log array
+      this.log.push({ from: message.from, content: message.content }); 
       this.scrollChatToBottom();
       this.logContent = this.log.map(message => message.from + ' : ' + message.content).join('\n');
     }
@@ -136,12 +134,11 @@ export class ContactMeComponent implements OnInit {
 
   private updateConnectedUsers() {
     if (this.connected) {
-      // WebSocket is connected, get the list of connected users from the server
       this.ws.send(JSON.stringify({ content: 'request_connected_users' }));
     } else {
-      // WebSocket is disconnected, clear the list of connected users
-      this.connectedUsers.next([]);
+      this.connectedUsersArray = [];
     }
+    this.isRequestingConnectedUsers = false;
   }
   
 }
