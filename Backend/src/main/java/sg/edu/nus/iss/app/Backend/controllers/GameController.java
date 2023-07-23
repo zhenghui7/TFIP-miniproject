@@ -58,8 +58,6 @@ public class GameController {
     public ResponseEntity<String> retrieveLeaderboard(@PathVariable String difficulty) {
 
         List<Board> leaderboard = gameService.retrieveLeaderboard(difficulty);
-
-        System.out.println(">>>>>>>>" + leaderboard);
         
         if (leaderboard.isEmpty()) {
             return ResponseEntity

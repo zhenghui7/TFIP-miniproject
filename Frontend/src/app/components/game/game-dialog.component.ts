@@ -36,7 +36,6 @@ export class GameDialogComponent implements OnInit {
       return;
     }
 
-    console.log('Posting to leaderboard:', this.form.value['gameNameControl'] , this.data.timer, this.data.difficulty);
     this.gameSvc.uploadLeaderboard(this.form.value['gameNameControl'] , this.data.timer, this.data.difficulty)
 
     this.dialogRef.close();

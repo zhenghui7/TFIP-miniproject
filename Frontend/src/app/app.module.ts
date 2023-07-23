@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -25,6 +25,7 @@ import { gameReducer } from './store/game.reducer';
 import { HoroscopeComponent } from './components/horoscope/horoscope.component';
 import { HoroscopeResultComponent } from './components/horoscope/horoscope-result.component';
 import { HoroscopeService } from './horoscope.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 const appRoutes: Routes = [
@@ -54,7 +55,12 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule,
     MaterialModule, HttpClientModule, RouterModule.forRoot(appRoutes , { useHash: true, bindToComponentInputs: true } ), 
-    StoreModule.forRoot({ game: gameReducer }), EffectsModule.forRoot([GameEffects]), 
+    StoreModule.forRoot({ game: gameReducer }), EffectsModule.forRoot([GameEffects]), ServiceWorkerModule.register('ngsw-worker.js', {
+  enabled: !isDevMode(),
+  // Register the ServiceWorker as soon as the application is stable
+  // or after 30 seconds (whichever comes first).
+  registrationStrategy: 'registerWhenStable:30000'
+}), 
   ],
   providers: [TarotService, GameService, HoroscopeService],
   bootstrap: [AppComponent]

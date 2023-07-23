@@ -54,7 +54,6 @@ export class GameSetupComponent implements OnInit {
     );
     this.cardsData$.subscribe((data: CardData) => {
       this.cardsData = data;
-      console.log(">>>>>> " + this.cardsData.state)
     });
   }
 

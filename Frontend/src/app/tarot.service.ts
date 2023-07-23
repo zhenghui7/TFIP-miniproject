@@ -12,7 +12,6 @@ export class TarotService {
 
   retrieveData(pastSelected: string, presentSelected: string, futureSelected: string): Observable<ErrorResponse | TarotResult[]> {
 
-    console.log(">>>>> " + pastSelected, presentSelected, futureSelected)
     return this.http.get<ErrorResponse | TarotResult[]>(`${this.url}/tarot/${pastSelected}/${presentSelected}/${futureSelected}`)
   }
     

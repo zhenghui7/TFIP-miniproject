@@ -95,7 +95,6 @@ public class ChatEndpoint extends TextWebSocketHandler {
         messageRepository.saveMessage(message);
 
         String json = (String) messageEncoder.convert(message).getPayload();
-        System.out.println(">>>>>>> json string before broadcast: " + json);
 
         TextMessage textMessage = new TextMessage(json);
         chatEndpoints.forEach(endpoint -> {
