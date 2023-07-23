@@ -1,14 +1,15 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CARDS } from 'src/app/util/constant';
 import { CardData, LeaderboardData } from 'src/app/util/model';
 import { GameDialogComponent } from './game-dialog.component';
 import { GameService } from 'src/app/game.service';
-import { Observable, firstValueFrom, take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameState } from 'src/app/store/game.reducer';
-import {setupCards, startTimer, stopTimer, updateLeaderboardData,
-  updateMatchOrDefault ,updateMatchedCount ,updateSameCardClicked,updateSelectedDifficulty ,updateToFlipped ,
+import {
+  setupCards, startTimer, stopTimer, updateLeaderboardData,
+  updateMatchOrDefault, updateMatchedCount, updateSelectedDifficulty, updateToFlipped
 } from 'src/app/store/game.actions';
 
 @Component({
@@ -17,9 +18,7 @@ import {setupCards, startTimer, stopTimer, updateLeaderboardData,
   styleUrls: ['./game.component.css'],
 })
 export class GameComponent implements OnInit {
-  cards = CARDS; //referring to cardImages
-
-  // @Input() data!: CardData;
+  cards = CARDS; 
 
   cardsData$: Observable<CardData[]>;
   timer$: Observable<number>;
@@ -46,7 +45,7 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setupCards(5); //default level: 5 pairs , to update for easier test
+    this.setupCards(5);
   }
 
   setupCards(pairCount: number): void {
@@ -144,8 +143,6 @@ export class GameComponent implements OnInit {
         .loadLeaderboard(difficulty)
         .subscribe((data: LeaderboardData[]) => {
           this.store.dispatch(updateLeaderboardData({ data }));
-
-          // this.leaderboardData = data;
         });
     });
   }

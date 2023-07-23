@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { CardData, LeaderboardData } from 'src/app/util/model';
+import { LeaderboardData } from 'src/app/util/model';
 
 export const setupCards = createAction('[Game] Setup Cards', props<{ pairCount: number }>());
 

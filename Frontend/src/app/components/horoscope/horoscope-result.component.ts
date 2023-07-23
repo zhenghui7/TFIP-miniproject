@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HoroscopeService } from 'src/app/horoscope.service';
-import { ErrorResponse, HoroscopeResult, TarotResult } from 'src/app/util/model';
+import { ErrorResponse, HoroscopeResult } from 'src/app/util/model';
 
 @Component({
   selector: 'app-horoscope-result',

@@ -1,13 +1,9 @@
-import { Store, on, createReducer } from '@ngrx/store';
+import { on, createReducer } from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
 
 import * as GameActions from './game.actions';
 import { CardData, LeaderboardData } from '../util/model';
 import { CARDS } from '../util/constant';
-import { MatDialog } from '@angular/material/dialog';
-import { inject } from '@angular/core';
-import { GameDialogComponent } from '../components/game/game-dialog.component';
-import { updateMatchOrDefault } from './game.actions';
 
 export interface GameState {
   cardsData: CardData[];
@@ -18,7 +14,6 @@ export interface GameState {
   isTimerRunning: boolean;
   selectedDifficulty: string;
   leaderboardData: LeaderboardData[];
-  // timerInterval: any;
   clickedIndex: number[];
 }
 
@@ -31,7 +26,6 @@ export const initialState: GameState = {
   isTimerRunning: false,
   selectedDifficulty: 'easy',
   leaderboardData: [],
-  // timerInterval: 0,
   clickedIndex: [],
 };
 
@@ -92,7 +86,6 @@ export const gameReducer = createReducer(
     leaderboardData: data
   })),
 
-  // Add other reducer actions here
 );
 
 function generateCardData(pairCount: number): CardData[] {

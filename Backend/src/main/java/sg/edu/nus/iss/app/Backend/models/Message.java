@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Message {
     private String from;
-    // private String to;
     private String content;
     private List<String> users;
 

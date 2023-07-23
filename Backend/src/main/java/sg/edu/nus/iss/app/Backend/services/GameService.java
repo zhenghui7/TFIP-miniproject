@@ -14,7 +14,6 @@ public class GameService {
     @Autowired
     GameRepository gameRepository;
 
-    // maybe to add @transaction here?
     public List<Board> uploadAndRetrieve(String name, float timer, String difficulty) {
         
         gameRepository.upload(name, timer, difficulty);

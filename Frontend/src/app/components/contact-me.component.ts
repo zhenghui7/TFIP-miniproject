@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { WBSTRING } from '../util/constant';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-contact-me',
@@ -110,13 +109,10 @@ export class ContactMeComponent implements OnInit {
 
   private handleIncomingMessage(event: MessageEvent) {
     const log = document.getElementById('log') as HTMLTextAreaElement;
-    // console.log(">>>>>>>>>>>>>> event.data: " + event.data);
 
     const message = JSON.parse(event.data);
     if (message.content === 'connected_users_list') {
-      // this.connectedUsers.next(message.users);
       this.connectedUsersArray = message.users;
-      // console.log(">>>>>>>>>>>> in connected_users_list: " + message.users)
 
       if (!this.isRequestingConnectedUsers) {
         this.isRequestingConnectedUsers = true;

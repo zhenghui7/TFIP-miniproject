@@ -1,5 +1,5 @@
 <div class="leaderboard-container" *ngIf="leaderboardData.length > 0; else emptyLeaderboard">
-  <span style="font-weight: 500;">Leaderboard ({{ gameSvc.selectedtDifficulty }})</span>
+  <span style="font-weight: 500;">Leaderboard ({{ gameSvc.selectedtDifficulty }}) <br>Top 10</span>
   <table>
     <thead>
       <tr>
@@ -16,9 +16,6 @@
       </tr>
     </tbody>
   </table>
-  <!-- <p class="text-center">
-    Tips for faster timing: You can also click on the same image twice..
-  </p> -->
 </div>
 
 <ng-template #emptyLeaderboard>

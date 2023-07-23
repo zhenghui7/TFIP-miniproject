@@ -19,6 +19,7 @@ export class TarotResultComponent implements OnInit {
   tarotSvc = inject(TarotService)
   result$!: Observable<ErrorResponse | TarotResult[]>
   errorResponse: ErrorResponse | null = null
+  showAlternate: boolean = false;
 
   ngOnInit(): void {
       this.result$ = this.tarotSvc.retrieveData(this.pastSelected, this.presentSelected, this.futureSelected)
@@ -47,6 +48,27 @@ export class TarotResultComponent implements OnInit {
     fortuneTelling = fortuneTelling.replace('[', '').replace(']', '');
     const fortuneTellingArray = fortuneTelling.split(',');
     return fortuneTellingArray.map((item) => item.trim()).join('<br>');
+  }
+
+  formatDifferentFortuneTelling(fortuneTelling: string): { love: string, career: string, finance: string } {
+    if (!fortuneTelling) {
+      return { love: '', career: '', finance: '' };
+    }
+
+    fortuneTelling = fortuneTelling.slice(1, -1);
+    const [love, career, finance] = fortuneTelling.split('], [');
+    
+    fortuneTelling = fortuneTelling.replace('[', '').replace(']', '');
+
+    return {
+      love: love ? love.replace('Love: ', '') : '',
+      career: career ? career.replace('Career: ', '') : '',
+      finance: finance ? finance.replace('Finance: ', '') : '',
+    };
+  }
+
+  toggleDisplay() {
+    this.showAlternate = !this.showAlternate;
   }
 
 }

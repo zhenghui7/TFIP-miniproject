@@ -9,43 +9,68 @@
   </button>
 </div>
 
+<div class="button-container">
+  <button mat-raised-button color="primary" (click)="toggleDisplay()" class="toggle-button">
+    Read more from another source?
+  </button>
+</div>
+
 <div *ngIf="result$ | async as result" class="result-background">
   <div *ngIf="isTarotResponseArray(result)">
     <div class="center-it">
       <img [src]="'/assets/cards/' + pastSelected + '.jpg'" />
-      <div class="container">
-        <h2>
-          {{ result[0].name }}
-          <span class="past">~(The Past)~</span>
-        </h2>
-        <p [innerHTML]="formatFortuneTelling(result[0].fortuneTelling)"></p>
+        <div class="container" *ngIf="isTarotResponseArray(result) && !showAlternate">
+          <h2>
+            {{ result[0].name }}
+            <span class="past">~(The Past)~</span>
+          </h2>
+          <p [innerHTML]="formatFortuneTelling(result[0].fortuneTelling)"></p>
+        </div>
+        <div class="container" *ngIf="isTarotResponseArray(result) && showAlternate">
+          <h2>
+            {{ result[0].name }}
+          </h2>
+          <p><strong>Love: <br></strong> {{ formatDifferentFortuneTelling(result[3].fortuneTelling).love }}</p>
+        </div>
       </div>
-    </div>
   </div>
 
   <div *ngIf="isTarotResponseArray(result)">
     <div class="center-it">
       <img [src]="'/assets/cards/' + presentSelected + '.jpg'" />
-      <div class="container">
-        <h2>
-          {{ result[1].name }}
-          <span class="present">~(The Present)~</span>
-        </h2>
-        <p [innerHTML]="formatFortuneTelling(result[1].fortuneTelling)"></p>
-      </div>
+        <div class="container" *ngIf="isTarotResponseArray(result) && !showAlternate">
+          <h2>
+            {{ result[1].name }}
+            <span class="present">~(The Present)~</span>
+          </h2>
+          <p [innerHTML]="formatFortuneTelling(result[1].fortuneTelling)"></p>
+        </div>
+        <div class="container" *ngIf="isTarotResponseArray(result) && showAlternate">
+          <h2>
+            {{ result[1].name }}
+          </h2>
+            <p><strong>Career: <br></strong> {{ formatDifferentFortuneTelling(result[3].fortuneTelling).career }}</p>
+        </div>
     </div>
   </div>
 
   <div *ngIf="isTarotResponseArray(result)">
     <div class="center-it">
       <img [src]="'/assets/cards/' + futureSelected + '.jpg'" />
-      <div class="container">
-        <h2>
-          {{ result[2].name }}
-          <span class="future">~(The Future)~</span>
-        </h2>
-        <p [innerHTML]="formatFortuneTelling(result[2].fortuneTelling)"></p>
-      </div>
+        <div class="container" *ngIf="isTarotResponseArray(result) && !showAlternate">
+          <h2>
+            {{ result[2].name }}
+            <span class="future">~(The Future)~</span>
+          </h2>
+          <p [innerHTML]="formatFortuneTelling(result[2].fortuneTelling)"></p>
+        </div>
+        <div class="container" *ngIf="isTarotResponseArray(result) && showAlternate">
+          <h2>
+            {{ result[2].name }}
+          </h2>
+          <p><strong>Finance: <br></strong> {{ formatDifferentFortuneTelling(result[3].fortuneTelling).finance }}</p>
+        </div>
     </div>
   </div>
 </div>
+

@@ -6,7 +6,7 @@
       </mat-form-field>
       <button mat-raised-button color="primary" (click)="connect()" [disabled]="connected">Connect</button>
       <button mat-raised-button color="warn" (click)="disconnect()" [disabled]="!connected">Disconnect</button>
-      <button mat-raised-button color="primary" (click)="retrievePastMessages()" [disabled]="!connected">Retrieve Past Messages</button>
+      <button mat-raised-button color="primary" (click)="retrievePastMessages()" [disabled]="!connected">Retrieve Messages / Refresh</button>
       <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
 
@@ -29,7 +29,7 @@
   </div>
 
   <div class="connected-users" *ngIf="connectedUsersArray.length > 0">
-    <h3>Currently Connected Users:</h3>
+    <h3>Connected User(s):</h3>
     <ol>
       <li *ngFor="let user of connectedUsersArray">{{ user }}</li>
     </ol>

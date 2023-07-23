@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -8,4 +7,12 @@ import { ThemePalette } from '@angular/material/core';
 })
 export class HeaderComponent {
 
+  favButton() {
+    window.alert('Thank you for your support =D');
+  }
+  
+  shareButton() {
+    window.alert('Oops!');
+  }
+  
 }

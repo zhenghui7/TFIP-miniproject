@@ -12,7 +12,6 @@ import { LeaderboardData } from 'src/app/util/model';
 })
 export class LeaderboardComponent implements OnInit {
   @Input() leaderboardData: LeaderboardData[] = [];
-  // leaderboardData: LeaderboardData[] = [];
   allBundles$!: Observable<LeaderboardData[]>;
   selectedDifficulty$: Observable<string>;
 

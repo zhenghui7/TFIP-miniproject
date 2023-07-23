@@ -19,8 +19,6 @@ export class GameDialogComponent implements OnInit {
   form!: FormGroup
   fb: FormBuilder = inject(FormBuilder)
 
-  // leaderboard$! : Observable<LeaderboardData[]>
-
   ngOnInit(): void {
     this.form = this.fb.group({
       gameNameControl: this.fb.control('', [Validators.required, Validators.minLength(3), Validators.maxLength(10) ])

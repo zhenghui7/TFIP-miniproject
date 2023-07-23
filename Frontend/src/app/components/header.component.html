@@ -10,12 +10,12 @@
   </mat-menu>
   <span class="app-title">My App</span>
   <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-    <!-- to update if got time -->
-    <mat-icon>favorite</mat-icon>
+  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon"
+    (click)="favButton()">
+    <mat-icon >favorite</mat-icon>
   </button>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-    <!-- to update if got time -->
-    <mat-icon>share</mat-icon>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+    (click)="shareButton()">
+    <mat-icon >share</mat-icon>
   </button>
 </mat-toolbar>
