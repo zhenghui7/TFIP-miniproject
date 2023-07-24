@@ -3,11 +3,11 @@
 
 -- source C:/opt/tfip/miniProject/Database/create.sql
 
-drop database if exists miniproject;
+drop database if exists railway;
 
-create database miniproject;
+create database railway;
 
-use miniproject;
+use railway;
 
 CREATE TABLE easy (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -37,11 +37,11 @@ CREATE TABLE extreme (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
 
-  INSERT INTO `miniproject`.`medium` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '1000');
+  INSERT INTO `railway`.`medium` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '1000');
   
-  INSERT INTO `miniproject`.`hard` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '1000');
+  INSERT INTO `railway`.`hard` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '1000');
 
-  INSERT INTO `miniproject`.`extreme` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '10000');
+  INSERT INTO `railway`.`extreme` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '10000');
 
 CREATE TABLE messages (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -50,8 +50,6 @@ CREATE TABLE messages (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
 );
-
-grant all privileges on miniproject.* to 'fred'@'%';
 
 
 

@@ -11,18 +11,3 @@ public class BackendApplication {
 	}
 
 }
-// @SpringBootApplication
-// @EnableWebSocket
-// public class BackendApplication implements WebSocketConfigurer {
-//     public static void main(String[] args) {
-//         SpringApplication.run(BackendApplication.class, args);
-//     }
-
-//     @Override
-//     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-//         registry.addHandler(new ChatWebSocketHandler(), "/chat/{username}")
-//                 .setAllowedOrigins("http://localhost:4200");
-//     }
-
-	
-// }

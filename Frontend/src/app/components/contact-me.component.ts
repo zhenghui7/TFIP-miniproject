@@ -30,7 +30,7 @@ export class ContactMeComponent implements OnInit {
       return;
     }
 
-    this.ws = new WebSocket('ws://' + this.wsURL + '/chat/' + this.username);
+    this.ws = new WebSocket('wss://' + this.wsURL + '/chat/' + this.username);
 
     this.ws.onopen = (event) => {
       this.errorMessage = '';
