@@ -130,7 +130,7 @@ public class ChatEndpoint extends TextWebSocketHandler {
     }
 
     private String getTimeNow() {
-        LocalDateTime postedTime = LocalDateTime.now(); // eg. this.getPosted();
+        LocalDateTime postedTime = LocalDateTime.now().plusHours(8); 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         return postedTime.format(formatter);
     }

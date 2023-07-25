@@ -9,8 +9,8 @@ export const CARDS: string[] = [
     'w07', 'w08', 'w09', 'w10', 'w11', 'w12', 'w13', 'w14'
   ];
   
-export const URLSTRING: string = 'https://enormous-stone-production.up.railway.app'
-export const WBSTRING: string = 'enormous-stone-production.up.railway.app'
+export const URLSTRING: string = 'https://hotaro-production.up.railway.app'
+export const WBSTRING: string = 'hotaro-production.up.railway.app'
 
 
 export const ZODIAC: string[] = ["aries", "taurus", "gemini", "cancer", "leo",

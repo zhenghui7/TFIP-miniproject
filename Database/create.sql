@@ -36,8 +36,6 @@ CREATE TABLE extreme (
   `timer` DECIMAL(30,2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
-
-  INSERT INTO `railway`.`medium` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '1000');
   
   INSERT INTO `railway`.`hard` (`id`, `name`, `timer`) VALUES ('1', 'DEFAULT', '1000');
 

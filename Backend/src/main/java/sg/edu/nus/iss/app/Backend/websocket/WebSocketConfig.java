@@ -16,11 +16,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(chatEndpoint, "/chat/{username}")
-            .setAllowedOrigins("https://enormous-stone-production.up.railway.app");
+            .setAllowedOrigins("https://hotaro-production.up.railway.app");
     }
 
-    // @Bean
-    // public WebSocketHandler ChatEndpoint() {
-    //     return new ChatEndpoint();
-    // }
 }
